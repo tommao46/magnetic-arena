@@ -32,7 +32,7 @@ class GameHUD {
         if (player.isBoosted) {
             const flicker = 0.7 + Math.sin(Date.now() / 60) * 0.3;
             ctx.fillStyle = `rgba(255, 255, 60, ${flicker})`;
-            ctx.fillText(labelPrefix + ' ⚡ 激发中(×3)', x + 6, y + 12);
+            ctx.fillText(labelPrefix + ' ⚡ 激发中(×5)', x + 6, y + 12);
         } else {
             ctx.fillStyle = labelColor;
             ctx.fillText(labelPrefix + ' [' + labelKey + '] 按住激发', x + 6, y + 12);

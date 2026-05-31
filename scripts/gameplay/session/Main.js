@@ -152,10 +152,10 @@ class MainSession {
         this.mapAPI = new MapAPI(this.map);
 
         const spawns = this.mapAPI.getSpawnPoints();
-        this.player1 = new Player(1, { moveSpeed: 280, magneticForce: 50000 });
+        this.player1 = new Player(1, { moveSpeed: 280, magneticForce: 120000 });
         this.player1.setPosition(spawns[0].x, spawns[0].y);
 
-        this.player2 = new Player(2, { moveSpeed: 280, magneticForce: 50000 });
+        this.player2 = new Player(2, { moveSpeed: 280, magneticForce: 120000 });
         this.player2.setPosition(spawns[1].x, spawns[1].y);
 
         this.player1.setup(this.player2, this.mapAPI, this.interactionAPI, this.inputHelper);
@@ -198,7 +198,16 @@ class MainSession {
         if (this._keydownHandler) document.removeEventListener('keydown', this._keydownHandler);
         if (this._keyupHandler) document.removeEventListener('keyup', this._keyupHandler);
 
+        // 游戏所有操作键，阻止浏览器默认行为防止冲突
+        const gameKeys = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',
+            'w','a','s','d','q','g','.','/',
+            'W','A','S','D','Q','G','r','R','1','2','3','4'];
+
         this._keydownHandler = (e) => {
+            // 阻止游戏键的浏览器默认行为（如 . 触发搜索 / 触发快速查找）
+            if (gameKeys.includes(e.key)) {
+                e.preventDefault();
+            }
             if (this.gameOver && e.key.toLowerCase() === 'r') { this.restart(); return; }
             this.inputHelper.onKeyDown(e);
             if (!this.gameOver) {
@@ -209,7 +218,12 @@ class MainSession {
                 }
             }
         };
-        this._keyupHandler = (e) => this.inputHelper.onKeyUp(e);
+        this._keyupHandler = (e) => {
+            if (gameKeys.includes(e.key)) {
+                e.preventDefault();
+            }
+            this.inputHelper.onKeyUp(e);
+        };
         document.addEventListener('keydown', this._keydownHandler);
         document.addEventListener('keyup', this._keyupHandler);
     }

@@ -83,7 +83,7 @@ class Player {
         // 对方已到达则不再受磁力影响
         if (!this.other.arrived) {
             const otherPos = this.other.getPos();
-            const effectiveForce = this.boostActive ? this.magneticForce * 3 : this.magneticForce;
+            const effectiveForce = this.boostActive ? this.magneticForce * 5 : this.magneticForce;
             const magVel = this.magneticCalculator.calcMagneticVelocity(
                 this.interaction,
                 { x: this.x, y: this.y },

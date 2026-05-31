@@ -1,13 +1,11 @@
 /* ============================================================
  *  磁力竞技场 — 主样式表
- *  仓库原版风格：红霓虹标题 + 3D按钮 + 全屏大覆盖层
  * ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* ── 整体背景 ── */
 body {
     background: #0a0f1a;
     min-height: 100vh;
@@ -17,7 +15,6 @@ body {
     font-family: 'Press Start 2P', cursive;
 }
 
-/* ── 主布局 ── */
 .game-wrapper {
     display: flex;
     gap: 20px;
@@ -26,7 +23,6 @@ body {
     z-index: 1;
 }
 
-/* ── 游戏画布容器 ── */
 .game-container {
     position: relative;
     border: 2px solid #2a3a5a;
@@ -46,10 +42,10 @@ body {
     background: rgba(8, 12, 24, 0.92);
     border: 2px solid #2a3a5a;
     border-radius: 4px;
-    padding: 14px;
-    width: 300px;
+    padding: 16px;
+    width: 340px;
     color: #8899aa;
-    font-size: 10px;
+    font-size: 13px;
     line-height: 2;
     max-height: 620px;
     overflow-y: auto;
@@ -62,25 +58,25 @@ body {
 
 .legend-panel h2 {
     color: #ff6b6b;
-    font-size: 13px;
+    font-size: 16px;
     text-align: center;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     text-shadow: 0 0 8px rgba(255, 107, 107, 0.5);
 }
 
 .legend-section-title {
     color: #5dade2;
-    font-size: 10px;
-    margin: 8px 0 4px 0;
-    padding-bottom: 2px;
+    font-size: 13px;
+    margin: 10px 0 6px 0;
+    padding-bottom: 3px;
     border-bottom: 1px solid rgba(42, 58, 90, 0.5);
 }
 
 .legend-item {
     display: flex;
     align-items: center;
-    margin: 2px 0;
-    gap: 7px;
+    margin: 3px 0;
+    gap: 8px;
     padding: 2px 4px;
     border-radius: 2px;
     transition: background 0.15s;
@@ -89,7 +85,7 @@ body {
 .legend-item:hover { background: rgba(60, 80, 160, 0.1); }
 
 .legend-swatch {
-    width: 16px; height: 16px;
+    width: 18px; height: 18px;
     border: 1px solid #444;
     flex-shrink: 0;
     position: relative;
@@ -101,15 +97,15 @@ body {
 /* ── 关卡标签 ── */
 .level-tabs {
     display: flex;
-    gap: 4px;
-    margin-bottom: 10px;
+    gap: 5px;
+    margin-bottom: 12px;
     flex-wrap: wrap;
 }
 
 .level-tab {
     font-family: 'Press Start 2P', cursive;
-    font-size: 10px;
-    padding: 6px 10px;
+    font-size: 12px;
+    padding: 7px 12px;
     background: #1a2a3a;
     color: #5dade2;
     border: 1px solid #3a5a8a;
@@ -132,20 +128,20 @@ body {
 
 /* ── 控制提示 ── */
 .control-hint {
-    margin-top: 10px;
-    padding: 10px;
+    margin-top: 12px;
+    padding: 12px;
     background: rgba(20, 30, 60, 0.4);
     border: 1px solid #2a4a6a;
     border-radius: 4px;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 1.9;
 }
 
 .control-hint .title {
     color: #ff6b6b;
     text-align: center;
-    margin-bottom: 6px;
-    font-size: 11px;
+    margin-bottom: 8px;
+    font-size: 13px;
 }
 
 .control-hint .p1 { color: #ff6b6b; }
@@ -156,10 +152,10 @@ body {
     background: rgba(255,255,255,0.08);
     border: 1px solid rgba(255,255,255,0.15);
     border-radius: 3px;
-    padding: 0 4px;
+    padding: 1px 5px;
     margin: 0 1px;
     color: #fff;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .control-hint .divider {
@@ -184,7 +180,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 30px;
     overflow-y: auto;
     transition: opacity 0.5s, visibility 0.5s;
 }
@@ -197,38 +193,38 @@ body {
 
 /* 标题 — 巨幅红色霓虹 */
 .start-title {
-    font-size: 60px;
+    font-size: 80px;
     color: #ff6b6b;
     text-shadow:
-        0 0 15px #ff6b6b,
-        0 0 30px #ff6b6b,
-        0 0 45px #ff6b6b,
-        0 0 70px rgba(255, 107, 107, 0.5);
-    margin-bottom: 12px;
-    letter-spacing: 6px;
+        0 0 20px #ff6b6b,
+        0 0 40px #ff6b6b,
+        0 0 60px #ff6b6b,
+        0 0 90px rgba(255, 107, 107, 0.5);
+    margin-bottom: 14px;
+    letter-spacing: 8px;
     animation: titleGlow 2s ease-in-out infinite alternate;
 }
 
 @keyframes titleGlow {
-    0% { text-shadow: 0 0 15px #ff6b6b, 0 0 30px #ff6b6b, 0 0 45px #ff6b6b; }
-    100% { text-shadow: 0 0 20px #ff6b6b, 0 0 40px #ff6b6b, 0 0 60px #ff6b6b, 0 0 90px rgba(255,107,107,0.5); }
+    0% { text-shadow: 0 0 20px #ff6b6b, 0 0 40px #ff6b6b, 0 0 60px #ff6b6b; }
+    100% { text-shadow: 0 0 25px #ff6b6b, 0 0 50px #ff6b6b, 0 0 75px #ff6b6b, 0 0 110px rgba(255,107,107,0.5); }
 }
 
 /* 副标题 */
 .start-subtitle {
-    font-size: 24px;
+    font-size: 30px;
     color: #5dade2;
-    margin-bottom: 10px;
-    letter-spacing: 4px;
-    text-shadow: 0 0 14px rgba(93, 173, 226, 0.5);
+    margin-bottom: 14px;
+    letter-spacing: 6px;
+    text-shadow: 0 0 18px rgba(93, 173, 226, 0.5);
 }
 
 /* 磁力规则横幅 */
 .start-magnetic {
-    font-size: 18px;
+    font-size: 22px;
     color: #aabbcc;
-    margin-bottom: 28px;
-    letter-spacing: 2px;
+    margin-bottom: 30px;
+    letter-spacing: 3px;
 }
 
 .start-magnetic .repel { color: #ff6b6b; }
@@ -237,108 +233,108 @@ body {
 /* 对抗规则卡 — 横幅宽卡 */
 .start-rules {
     background: rgba(20, 30, 55, 0.6);
-    border: 1px solid rgba(255, 215, 0, 0.25);
-    border-radius: 8px;
-    padding: 18px 36px;
-    margin-bottom: 28px;
-    max-width: 700px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 10px;
+    padding: 22px 44px;
+    margin-bottom: 32px;
+    max-width: 800px;
 }
 
 .start-rules-title {
-    font-size: 22px;
+    font-size: 26px;
     color: #ffd700;
     text-align: center;
-    margin-bottom: 10px;
-    text-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+    margin-bottom: 12px;
+    text-shadow: 0 0 16px rgba(255, 215, 0, 0.5);
 }
 
 .start-rules-text {
-    font-size: 15px;
+    font-size: 18px;
     color: #aabbcc;
-    line-height: 2;
+    line-height: 2.2;
     text-align: center;
 }
 
 /* 双人操控卡 — 横幅并排 */
 .start-controls {
     display: flex;
-    gap: 40px;
-    margin-bottom: 30px;
+    gap: 50px;
+    margin-bottom: 34px;
 }
 
 .start-player-card {
     background: rgba(20, 30, 55, 0.6);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    padding: 20px 30px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 24px 36px;
     text-align: center;
-    min-width: 220px;
+    min-width: 260px;
 }
 
 .start-player-card h3 {
-    font-size: 18px;
-    margin-bottom: 16px;
+    font-size: 22px;
+    margin-bottom: 18px;
 }
 
 .start-player-card.p1 h3 { color: #ff6b6b; }
 .start-player-card.p2 h3 { color: #5dade2; }
 
 .start-key-row {
-    font-size: 16px;
+    font-size: 18px;
     color: #aabbcc;
-    line-height: 2.6;
+    line-height: 2.8;
     text-align: left;
 }
 
 .start-key-row .kb {
     display: inline-block;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 5px;
-    padding: 4px 10px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 6px;
+    padding: 5px 12px;
     color: #ffffff;
-    font-size: 14px;
+    font-size: 16px;
     margin: 0 3px;
-    min-width: 24px;
+    min-width: 28px;
     text-align: center;
 }
 
 /* 3D红色按钮 */
 .start-btn {
     font-family: 'Press Start 2P', cursive;
-    font-size: 22px;
-    padding: 20px 60px;
+    font-size: 28px;
+    padding: 24px 70px;
     background: linear-gradient(180deg, #ff6b6b 0%, #c0392b 100%);
     color: #ffffff;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     box-shadow:
-        0 8px 0 #8b0000,
-        0 10px 20px rgba(0, 0, 0, 0.5);
+        0 10px 0 #8b0000,
+        0 12px 24px rgba(0, 0, 0, 0.5);
     transition: all 0.15s;
-    letter-spacing: 4px;
+    letter-spacing: 6px;
 }
 
 .start-btn:hover {
     background: linear-gradient(180deg, #ff7777 0%, #cc4444 100%);
     transform: translateY(-2px);
     box-shadow:
-        0 10px 0 #8b0000,
-        0 12px 24px rgba(0, 0, 0, 0.5);
+        0 12px 0 #8b0000,
+        0 14px 28px rgba(0, 0, 0, 0.5);
 }
 
 .start-btn:active {
-    transform: translateY(5px);
+    transform: translateY(6px);
     box-shadow:
-        0 3px 0 #8b0000,
-        0 4px 12px rgba(0, 0, 0, 0.5);
+        0 4px 0 #8b0000,
+        0 6px 14px rgba(0, 0, 0, 0.5);
 }
 
 /* 底部提示 */
 .start-hint {
-    margin-top: 22px;
-    font-size: 14px;
+    margin-top: 24px;
+    font-size: 16px;
     color: #667788;
 }
 
@@ -367,40 +363,40 @@ body {
 .help-content {
     background: rgba(8, 12, 24, 0.97);
     border: 2px solid #3a5a8a;
-    border-radius: 8px;
-    padding: 28px;
-    max-width: 780px;
-    max-height: 80vh;
+    border-radius: 10px;
+    padding: 32px;
+    max-width: 900px;
+    max-height: 85vh;
     overflow-y: auto;
     box-shadow: 0 0 40px rgba(60, 80, 160, 0.2);
 }
 
 .help-content h2 {
-    font-size: 20px;
+    font-size: 26px;
     color: #ffd700;
     text-align: center;
-    margin-bottom: 18px;
-    text-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+    margin-bottom: 20px;
+    text-shadow: 0 0 14px rgba(255, 215, 0, 0.3);
 }
 
 .help-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin-bottom: 14px;
+    gap: 16px;
+    margin-bottom: 16px;
 }
 
 .help-card {
     background: rgba(20, 30, 55, 0.5);
     border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 6px;
-    padding: 14px;
+    border-radius: 8px;
+    padding: 18px;
 }
 
 .help-card h3 {
-    font-size: 13px;
-    margin-bottom: 10px;
-    padding-bottom: 5px;
+    font-size: 16px;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
@@ -411,12 +407,12 @@ body {
 
 .help-card table {
     width: 100%;
-    font-size: 11px;
+    font-size: 14px;
     color: #aabbcc;
 }
 
 .help-card td {
-    padding: 3px 4px;
+    padding: 4px 5px;
 }
 
 .help-card td:first-child {
@@ -426,7 +422,7 @@ body {
 
 .help-close-hint {
     text-align: center;
-    font-size: 10px;
+    font-size: 13px;
     color: #667788;
-    margin-top: 8px;
+    margin-top: 10px;
 }
