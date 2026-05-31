@@ -15,7 +15,6 @@ body {
     justify-content: center;
     align-items: center;
     font-family: 'Press Start 2P', cursive;
-    overflow: hidden;
 }
 
 /* ── 主布局 ── */
@@ -173,8 +172,7 @@ body {
 .control-hint .info { color: #8899aa; }
 
 /* ═══════════════════════════════════════════════
- *  开始覆盖层 — 全屏大界面（仓库原版风格）
- *  参照 magnet-game.html 设计
+ *  开始覆盖层 — 横幅大界面
  * ═══════════════════════════════════════════════ */
 
 .start-overlay {
@@ -186,6 +184,8 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 20px;
+    overflow-y: auto;
     transition: opacity 0.5s, visibility 0.5s;
 }
 
@@ -195,150 +195,150 @@ body {
     pointer-events: none;
 }
 
-/* 标题 — 红色霓虹呼吸发光 */
+/* 标题 — 巨幅红色霓虹 */
 .start-title {
-    font-size: 36px;
+    font-size: 60px;
     color: #ff6b6b;
     text-shadow:
-        0 0 10px #ff6b6b,
-        0 0 20px #ff6b6b,
+        0 0 15px #ff6b6b,
         0 0 30px #ff6b6b,
-        0 0 50px rgba(255, 107, 107, 0.5);
-    margin-bottom: 10px;
-    letter-spacing: 3px;
+        0 0 45px #ff6b6b,
+        0 0 70px rgba(255, 107, 107, 0.5);
+    margin-bottom: 12px;
+    letter-spacing: 6px;
     animation: titleGlow 2s ease-in-out infinite alternate;
 }
 
 @keyframes titleGlow {
-    0% { text-shadow: 0 0 10px #ff6b6b, 0 0 20px #ff6b6b, 0 0 30px #ff6b6b; }
-    100% { text-shadow: 0 0 15px #ff6b6b, 0 0 30px #ff6b6b, 0 0 50px #ff6b6b, 0 0 70px rgba(255,107,107,0.5); }
+    0% { text-shadow: 0 0 15px #ff6b6b, 0 0 30px #ff6b6b, 0 0 45px #ff6b6b; }
+    100% { text-shadow: 0 0 20px #ff6b6b, 0 0 40px #ff6b6b, 0 0 60px #ff6b6b, 0 0 90px rgba(255,107,107,0.5); }
 }
 
 /* 副标题 */
 .start-subtitle {
-    font-size: 18px;
+    font-size: 24px;
     color: #5dade2;
-    margin-bottom: 6px;
-    letter-spacing: 2px;
-    text-shadow: 0 0 10px rgba(93, 173, 226, 0.4);
+    margin-bottom: 10px;
+    letter-spacing: 4px;
+    text-shadow: 0 0 14px rgba(93, 173, 226, 0.5);
 }
 
-/* 磁力规则 */
+/* 磁力规则横幅 */
 .start-magnetic {
-    font-size: 14px;
+    font-size: 18px;
     color: #aabbcc;
-    margin-bottom: 30px;
-    letter-spacing: 1px;
+    margin-bottom: 28px;
+    letter-spacing: 2px;
 }
 
 .start-magnetic .repel { color: #ff6b6b; }
 .start-magnetic .attract { color: #5dade2; }
 
-/* 对抗规则卡 */
+/* 对抗规则卡 — 横幅宽卡 */
 .start-rules {
     background: rgba(20, 30, 55, 0.6);
-    border: 1px solid rgba(255, 215, 0, 0.2);
-    border-radius: 6px;
-    padding: 14px 28px;
-    margin-bottom: 30px;
-    max-width: 550px;
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    border-radius: 8px;
+    padding: 18px 36px;
+    margin-bottom: 28px;
+    max-width: 700px;
 }
 
 .start-rules-title {
-    font-size: 16px;
+    font-size: 22px;
     color: #ffd700;
     text-align: center;
-    margin-bottom: 8px;
-    text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+    margin-bottom: 10px;
+    text-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
 }
 
 .start-rules-text {
-    font-size: 12px;
+    font-size: 15px;
     color: #aabbcc;
     line-height: 2;
     text-align: center;
 }
 
-/* 双人操控卡 */
+/* 双人操控卡 — 横幅并排 */
 .start-controls {
     display: flex;
-    gap: 50px;
-    margin-bottom: 35px;
+    gap: 40px;
+    margin-bottom: 30px;
 }
 
 .start-player-card {
     background: rgba(20, 30, 55, 0.6);
     border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 6px;
-    padding: 18px 24px;
+    border-radius: 8px;
+    padding: 20px 30px;
     text-align: center;
-    min-width: 200px;
+    min-width: 220px;
 }
 
 .start-player-card h3 {
-    font-size: 15px;
-    margin-bottom: 14px;
+    font-size: 18px;
+    margin-bottom: 16px;
 }
 
 .start-player-card.p1 h3 { color: #ff6b6b; }
 .start-player-card.p2 h3 { color: #5dade2; }
 
 .start-key-row {
-    font-size: 13px;
+    font-size: 16px;
     color: #aabbcc;
-    line-height: 2.4;
+    line-height: 2.6;
     text-align: left;
 }
 
 .start-key-row .kb {
     display: inline-block;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 4px;
-    padding: 3px 8px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 5px;
+    padding: 4px 10px;
     color: #ffffff;
-    font-size: 12px;
-    margin: 0 2px;
-    min-width: 22px;
+    font-size: 14px;
+    margin: 0 3px;
+    min-width: 24px;
     text-align: center;
 }
 
 /* 3D红色按钮 */
 .start-btn {
     font-family: 'Press Start 2P', cursive;
-    font-size: 18px;
-    padding: 16px 50px;
+    font-size: 22px;
+    padding: 20px 60px;
     background: linear-gradient(180deg, #ff6b6b 0%, #c0392b 100%);
     color: #ffffff;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     box-shadow:
-        0 6px 0 #8b0000,
-        0 8px 15px rgba(0, 0, 0, 0.5);
+        0 8px 0 #8b0000,
+        0 10px 20px rgba(0, 0, 0, 0.5);
     transition: all 0.15s;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
 }
 
 .start-btn:hover {
     background: linear-gradient(180deg, #ff7777 0%, #cc4444 100%);
     transform: translateY(-2px);
     box-shadow:
-        0 8px 0 #8b0000,
-        0 10px 20px rgba(0, 0, 0, 0.5);
+        0 10px 0 #8b0000,
+        0 12px 24px rgba(0, 0, 0, 0.5);
 }
 
 .start-btn:active {
-    transform: translateY(4px);
+    transform: translateY(5px);
     box-shadow:
-        0 2px 0 #8b0000,
-        0 3px 10px rgba(0, 0, 0, 0.5);
+        0 3px 0 #8b0000,
+        0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 /* 底部提示 */
 .start-hint {
-    margin-top: 20px;
-    font-size: 12px;
+    margin-top: 22px;
+    font-size: 14px;
     color: #667788;
 }
 
