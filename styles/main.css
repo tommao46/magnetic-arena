@@ -47,10 +47,10 @@ body {
     background: rgba(8, 12, 24, 0.92);
     border: 2px solid #2a3a5a;
     border-radius: 4px;
-    padding: 12px;
-    width: 270px;
+    padding: 14px;
+    width: 300px;
     color: #8899aa;
-    font-size: 7px;
+    font-size: 10px;
     line-height: 2;
     max-height: 620px;
     overflow-y: auto;
@@ -63,7 +63,7 @@ body {
 
 .legend-panel h2 {
     color: #ff6b6b;
-    font-size: 10px;
+    font-size: 13px;
     text-align: center;
     margin-bottom: 8px;
     text-shadow: 0 0 8px rgba(255, 107, 107, 0.5);
@@ -71,7 +71,7 @@ body {
 
 .legend-section-title {
     color: #5dade2;
-    font-size: 7px;
+    font-size: 10px;
     margin: 8px 0 4px 0;
     padding-bottom: 2px;
     border-bottom: 1px solid rgba(42, 58, 90, 0.5);
@@ -109,7 +109,7 @@ body {
 
 .level-tab {
     font-family: 'Press Start 2P', cursive;
-    font-size: 7px;
+    font-size: 10px;
     padding: 6px 10px;
     background: #1a2a3a;
     color: #5dade2;
@@ -138,7 +138,7 @@ body {
     background: rgba(20, 30, 60, 0.4);
     border: 1px solid #2a4a6a;
     border-radius: 4px;
-    font-size: 7px;
+    font-size: 10px;
     line-height: 1.9;
 }
 
@@ -146,7 +146,7 @@ body {
     color: #ff6b6b;
     text-align: center;
     margin-bottom: 6px;
-    font-size: 8px;
+    font-size: 11px;
 }
 
 .control-hint .p1 { color: #ff6b6b; }
@@ -160,7 +160,7 @@ body {
     padding: 0 4px;
     margin: 0 1px;
     color: #fff;
-    font-size: 7px;
+    font-size: 10px;
 }
 
 .control-hint .divider {
@@ -216,7 +216,7 @@ body {
 
 /* 副标题 */
 .start-subtitle {
-    font-size: 14px;
+    font-size: 18px;
     color: #5dade2;
     margin-bottom: 6px;
     letter-spacing: 2px;
@@ -225,7 +225,7 @@ body {
 
 /* 磁力规则 */
 .start-magnetic {
-    font-size: 11px;
+    font-size: 14px;
     color: #aabbcc;
     margin-bottom: 30px;
     letter-spacing: 1px;
@@ -245,7 +245,7 @@ body {
 }
 
 .start-rules-title {
-    font-size: 12px;
+    font-size: 16px;
     color: #ffd700;
     text-align: center;
     margin-bottom: 8px;
@@ -253,7 +253,7 @@ body {
 }
 
 .start-rules-text {
-    font-size: 9px;
+    font-size: 12px;
     color: #aabbcc;
     line-height: 2;
     text-align: center;
@@ -276,7 +276,7 @@ body {
 }
 
 .start-player-card h3 {
-    font-size: 12px;
+    font-size: 15px;
     margin-bottom: 14px;
 }
 
@@ -284,7 +284,7 @@ body {
 .start-player-card.p2 h3 { color: #5dade2; }
 
 .start-key-row {
-    font-size: 10px;
+    font-size: 13px;
     color: #aabbcc;
     line-height: 2.4;
     text-align: left;
@@ -297,7 +297,7 @@ body {
     border-radius: 4px;
     padding: 3px 8px;
     color: #ffffff;
-    font-size: 9px;
+    font-size: 12px;
     margin: 0 2px;
     min-width: 22px;
     text-align: center;
@@ -338,7 +338,7 @@ body {
 /* 底部提示 */
 .start-hint {
     margin-top: 20px;
-    font-size: 9px;
+    font-size: 12px;
     color: #667788;
 }
 
@@ -369,14 +369,14 @@ body {
     border: 2px solid #3a5a8a;
     border-radius: 8px;
     padding: 28px;
-    max-width: 720px;
+    max-width: 780px;
     max-height: 80vh;
     overflow-y: auto;
     box-shadow: 0 0 40px rgba(60, 80, 160, 0.2);
 }
 
 .help-content h2 {
-    font-size: 16px;
+    font-size: 20px;
     color: #ffd700;
     text-align: center;
     margin-bottom: 18px;
@@ -398,7 +398,7 @@ body {
 }
 
 .help-card h3 {
-    font-size: 10px;
+    font-size: 13px;
     margin-bottom: 10px;
     padding-bottom: 5px;
     border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -411,7 +411,7 @@ body {
 
 .help-card table {
     width: 100%;
-    font-size: 8px;
+    font-size: 11px;
     color: #aabbcc;
 }
 
@@ -426,7 +426,7 @@ body {
 
 .help-close-hint {
     text-align: center;
-    font-size: 8px;
+    font-size: 10px;
     color: #667788;
     margin-top: 8px;
 }
