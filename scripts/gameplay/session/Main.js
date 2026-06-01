@@ -1,7 +1,6 @@
 // ============================================================
 //  主游戏场景 — 双人对抗磁力竞技场
-//  对抗规则：金币分 + 时间分 = 总分，高分者胜
-//  目的地远离出生点，到达后消失，双方到达后结算
+//  对抗规则 + 拖尾特效 + 磁力陷阱 + 丰富关卡
 // ============================================================
 
 class MainSession {
@@ -27,9 +26,14 @@ class MainSession {
         this.inputHelper = new InputHelper();
         this.coins = [];
         this.powerUps = [];
+        this.traps = [];
         this.effectSpawner = new EffectSpawner();
         this.hud = new GameHUD(this.canvasW, this.canvasH);
         this.characterGraphics = new CharacterGraphics();
+
+        // 拖尾特效
+        this.trailP1 = new TrailEffect(1);
+        this.trailP2 = new TrailEffect(2);
 
         this.stars = [];
         this.initStars();
@@ -38,25 +42,35 @@ class MainSession {
         this.titleTimer = 0;
         this.gameOver = false;
 
-        // 关卡地图（目的地远离出生点）
-        this.levelMaps = [
+        this.levelMaps = this.buildLevels();
+
+        // 监听陷阱特效信号
+        SignalBus.on('effectSpawned', (data) => {
+            if (data.type === 'floatText') {
+                this.effectSpawner.spawnCollectText(data.x, data.y, data.text, data.color);
+            }
+        });
+    }
+
+    buildLevels() {
+        return [
             {
                 name: '对决峡谷',
                 map: [
                     '####################',
-                    '#P.........BBB....Q#',
+                    '#P......K..BBB....Q#',
                     '#..####.....##....#',
-                    '#..#..C....C......#',
+                    '#..#..C...KC......#',
                     '#..#..BBBB......###',
-                    '#..#..........C..#',
+                    '#..#......K...C..#',
                     '#...####..........#',
-                    '#...C...BBBB......#',
+                    '#...C...BBBB..K...#',
                     '#...####..........#',
-                    '#..#..............#',
+                    '#..#......K.......#',
                     '#..###..BBBB..C..##',
                     '#..#..C.......C..#',
                     '#..##....####..###',
-                    '#......G.G.......#',
+                    '#...K..G.G..K....#',
                     '####################',
                 ]
             },
@@ -64,19 +78,19 @@ class MainSession {
                 name: '磁性绕道',
                 map: [
                     '####################',
-                    '#P.....BBBB......Q#',
+                    '#P....KBBBB......Q#',
                     '#.####........####.#',
-                    '#.#....C..T.......#',
+                    '#.#...KC..T..K....#',
                     '#.#..####..####.#.#',
                     '#.#..C..........#.#',
                     '#.#..BBBB..BBBB.#.#',
-                    '#.#...........C..#.#',
+                    '#.#....K......C..#.#',
                     '#.########..####.#',
-                    '#.......T.........#',
+                    '#......KT.........#',
                     '#..####..BBBB..#.#',
-                    '#..C...........C..#',
+                    '#..CK.........C..#',
                     '#....####..####.#',
-                    '#......G.G.......#',
+                    '#..K...G.G..K....#',
                     '####################',
                 ]
             },
@@ -84,19 +98,19 @@ class MainSession {
                 name: '分岔迷宫',
                 map: [
                     '####################',
-                    '#P..........BBB..Q#',
+                    '#P......K...BBB..Q#',
                     '#.####.....##.....#',
                     '#.#..C....BBBB..#.#',
-                    '#.#..##..C......#.#',
+                    '#.#..##..C..K...#.#',
                     '#.#..........##.#.#',
                     '#.#..####..T..#.#.#',
                     '#.#..C..........#.#',
                     '#.#..BBBB..####.#.#',
-                    '#.#..C..........#.#',
+                    '#.#..C......K...#.#',
                     '#.#..##........#.#',
                     '#...#..####..##..#',
-                    '#.C..............#',
-                    '#......G.G.......#',
+                    '#.C....K.........#',
+                    '#...K..G.G.......#',
                     '####################',
                 ]
             },
@@ -104,18 +118,58 @@ class MainSession {
                 name: '漩涡竞技场',
                 map: [
                     '####################',
-                    '#P....BBBB.......Q#',
+                    '#P....BBBB..K....Q#',
                     '#..####....####..#',
                     '#..#..........#..#',
                     '#.#..C..BBBB..#.#',
-                    '#.#..........#.#.#',
+                    '#.#.....K....#.#.#',
                     '#.#..####..T.#.#.#',
                     '#.#..C.......#.#.#',
                     '#.#..BBBB.####.#.#',
-                    '#.#..C..........#.#',
+                    '#.#..C..K......#.#',
                     '#.#..........##.#',
                     '#..####..####..#',
-                    '#......G.G.......#',
+                    '#....K.G.G.......#',
+                    '#....C......C....#',
+                    '####################',
+                ]
+            },
+            {
+                name: '陷阱迷宫',
+                map: [
+                    '####################',
+                    '#P..K..BBBB.K....Q#',
+                    '#.####..........##.#',
+                    '#.#..C..K..K..C..#',
+                    '#.#..##..BBBB..#.#',
+                    '#.#..K..........#.#',
+                    '#.#..##..T..##.#.#',
+                    '#.#......BBBB.....#',
+                    '#.#..K..####..K.#',
+                    '#.#..C..........#.#',
+                    '#.#..BBBB..T..#.#',
+                    '#.#..K......K..#.#',
+                    '#....##..####..#',
+                    '#.K....G.G.......#',
+                    '####################',
+                ]
+            },
+            {
+                name: '磁暴战场',
+                map: [
+                    '####################',
+                    '#P....K...BBB..K.Q#',
+                    '#..####....####..#',
+                    '#..#..........#..#',
+                    '#.#..C..KK..C..#.#',
+                    '#.#....BBBB....#.#',
+                    '#.#..####..T..#.#.#',
+                    '#.#..C...K.....#.#',
+                    '#.#..BBBB..BBB.#.#',
+                    '#.#..C..........#.#',
+                    '#.#........K...##.#',
+                    '#..####..####..#',
+                    '#.....KG.G........#',
                     '#....C......C....#',
                     '####################',
                 ]
@@ -125,12 +179,12 @@ class MainSession {
 
     initStars() {
         this.stars = [];
-        for (let i = 0; i < 80; i++) {
+        for (let i = 0; i < 100; i++) {
             this.stars.push({
                 x: Math.random() * this.canvasW,
                 y: Math.random() * this.canvasH,
-                size: 0.5 + Math.random() * 1.5,
-                twinkleSpeed: 0.5 + Math.random() * 2,
+                size: 0.3 + Math.random() * 1.8,
+                twinkleSpeed: 0.3 + Math.random() * 2.5,
                 twinkleOffset: Math.random() * Math.PI * 2
             });
         }
@@ -160,6 +214,28 @@ class MainSession {
 
         this.player1.setup(this.player2, this.mapAPI, this.interactionAPI, this.inputHelper);
         this.player2.setup(this.player1, this.mapAPI, this.interactionAPI, this.inputHelper);
+
+        // 挂载拖尾特效
+        this.trailP1.clear();
+        this.trailP2.clear();
+        this.player1.trailEffect = this.trailP1;
+        this.player2.trailEffect = this.trailP2;
+
+        // 创建陷阱
+        this.traps = [];
+        this.player1.traps = this.traps;
+        this.player2.traps = this.traps;
+        const rows = this.levelMaps[levelId].map;
+        let trapId = 0;
+        for (let row = 0; row < rows.length; row++) {
+            for (let col = 0; col < rows[row].length; col++) {
+                if (rows[row][col] === 'K') {
+                    const x = col * this.tileSize;
+                    const y = row * this.tileSize;
+                    this.traps.push(new MagneticTrap(x, y, this.tileSize, 'K', trapId++));
+                }
+            }
+        }
 
         this.inputHelper.registerScheme(1, {
             up: 'w', down: 's', left: 'a', right: 'd',
@@ -198,13 +274,11 @@ class MainSession {
         if (this._keydownHandler) document.removeEventListener('keydown', this._keydownHandler);
         if (this._keyupHandler) document.removeEventListener('keyup', this._keyupHandler);
 
-        // 游戏所有操作键，阻止浏览器默认行为防止冲突
         const gameKeys = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',
             'w','a','s','d','q','g','.','/',
-            'W','A','S','D','Q','G','r','R','1','2','3','4'];
+            'W','A','S','D','Q','G','r','R','1','2','3','4','5','6','7','8'];
 
         this._keydownHandler = (e) => {
-            // 阻止游戏键的浏览器默认行为（如 . 触发搜索 / 触发快速查找）
             if (gameKeys.includes(e.key)) {
                 e.preventDefault();
             }
@@ -212,9 +286,8 @@ class MainSession {
             this.inputHelper.onKeyDown(e);
             if (!this.gameOver) {
                 const num = parseInt(e.key);
-                if (num >= 1 && num <= 4 && num - 1 !== this.levelId) {
+                if (num >= 1 && num <= 8 && num - 1 !== this.levelId && (num - 1) < this.levelMaps.length) {
                     this.restart(num - 1);
-                    document.querySelectorAll('.level-tab').forEach((t, i) => t.classList.toggle('active', i === (num - 1)));
                 }
             }
         };
@@ -269,6 +342,7 @@ class MainSession {
 
         for (const coin of this.coins) coin.update(delta, this.totalTime);
         for (const pu of this.powerUps) pu.update(delta);
+        for (const trap of this.traps) trap.update(delta);
     }
 
     checkCollectibles() {
@@ -310,7 +384,6 @@ class MainSession {
         }
     }
 
-    // 结算点检测（对抗规则：单个到达即记录，双方都到后比较）
     checkSettlePoints() {
         if (!this.player1.arrived && this.mapAPI.isAtSettlePoint(this.player1.getPos())) {
             this.player1.markArrived(this.totalTime);
@@ -323,7 +396,6 @@ class MainSession {
             this.effectSpawner.spawnSettleEffect(this.player2.x, this.player2.y);
         }
 
-        // 双方都到达 → 结算
         if (this.player1.arrived && this.player2.arrived && !this.gameOver) {
             this.gameOver = true;
             GameManager.goToGameOver();
@@ -345,9 +417,16 @@ class MainSession {
         this.drawMapElements(ctx);
         for (const coin of this.coins) coin.draw(ctx, this.totalTime);
         for (const pu of this.powerUps) pu.draw(ctx);
+
+        // 绘制陷阱（在玩家下方）
+        for (const trap of this.traps) trap.draw(ctx, this.totalTime);
+
         this.hud.drawMagneticLine(ctx, this.player1, this.player2);
+
+        // 玩家绘制（含拖尾）
         this.player1.draw(ctx);
         this.player2.draw(ctx);
+
         this.effectSpawner.draw(ctx);
 
         // HUD
@@ -357,21 +436,20 @@ class MainSession {
         this.hud.drawBoostStatus(ctx, this.player1, 14, this.canvasH - 100, 'P1', 'G', '#ffaa44');
         this.hud.drawBoostStatus(ctx, this.player2, 296, this.canvasH - 100, 'P2', '.', '#6699ff');
 
-        // 到达状态
         this.hud.drawArrivalStatus(ctx, this.player1, this.player2);
 
-        // 关卡信息
+        // 底部提示
         ctx.fillStyle = 'rgba(6, 10, 20, 0.7)';
-        this.hud.roundRect(ctx, this.canvasW / 2 - 90, this.canvasH - 30, 180, 22, 4);
+        this.hud.roundRect(ctx, this.canvasW / 2 - 120, this.canvasH - 30, 240, 22, 4);
         ctx.fill();
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
         ctx.lineWidth = 1;
-        this.hud.roundRect(ctx, this.canvasW / 2 - 90, this.canvasH - 30, 180, 22, 4);
+        this.hud.roundRect(ctx, this.canvasW / 2 - 120, this.canvasH - 30, 240, 22, 4);
         ctx.stroke();
         ctx.fillStyle = '#8899aa';
         ctx.font = '7px "Press Start 2P"';
         ctx.textAlign = 'center';
-        ctx.fillText('1-4换关卡 | R重开 | H帮助', this.canvasW / 2, this.canvasH - 14);
+        ctx.fillText('1-' + this.levelMaps.length + '换关卡 | R重开 | H帮助', this.canvasW / 2, this.canvasH - 14);
         ctx.textAlign = 'start';
 
         if (this.titleAlpha > 0) {
@@ -386,7 +464,7 @@ class MainSession {
 
     drawStars(ctx) {
         for (const s of this.stars) {
-            const t = 0.3 + Math.sin(this.totalTime * s.twinkleSpeed + s.twinkleOffset) * 0.3;
+            const t = 0.25 + Math.sin(this.totalTime * s.twinkleSpeed + s.twinkleOffset) * 0.35;
             ctx.fillStyle = `rgba(255, 255, 255, ${t})`;
             ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2); ctx.fill();
         }
@@ -407,7 +485,6 @@ class MainSession {
                     case 'P': this.drawSpawn(ctx, cx, cy, '#ff4444', 'P1'); break;
                     case 'Q': this.drawSpawn(ctx, cx, cy, '#4488ff', 'P2'); break;
                     case 'G': this.drawGoal(ctx, cx, cy); break;
-                    case 'K': this.drawTrap(ctx, cx, cy); break;
                 }
             }
         }
@@ -474,10 +551,14 @@ class MainSession {
         ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(cx, cy, 4, 0, Math.PI * 2); ctx.fill();
     }
 
-    drawTrap(ctx, cx, cy) {
-        const pulse = Math.abs(Math.sin(this.totalTime * 2.5 + cx * 0.02));
-        for (let i = 0; i < 3; i++) { const r = 8 + pulse * 8 + i * 3; const a = 0.1 - i * 0.03 - pulse * 0.05; if (a <= 0) continue; ctx.strokeStyle = `rgba(255, 30, 0, ${a})`; ctx.lineWidth = 1; ctx.setLineDash([2, 4]); ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke(); } ctx.setLineDash([]);
-        ctx.fillStyle = '#991111'; ctx.fillRect(cx - 8, cy - 8, 16, 16); ctx.fillStyle = '#cc2222'; ctx.fillRect(cx - 6, cy - 6, 12, 12);
+    // 设置拖尾样式
+    setTrailStyle(playerId, styleKey) {
+        if (playerId === 1) this.trailP1.setStyle(styleKey);
+        else this.trailP2.setStyle(styleKey);
+    }
+
+    getTrailStyles() {
+        return this.trailP1.getTrailStyleNames();
     }
 
     stop() {

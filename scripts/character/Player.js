@@ -2,6 +2,7 @@
 //  玩家主类 — 管理单个玩家的状态、移动、磁力和绘制
 //  仿照 kkk/character/player/Player.gd 设计
 //  对抗规则：到达目的地后消失
+//  支持拖尾特效和磁力陷阱
 // ============================================================
 
 class Player {
@@ -25,12 +26,20 @@ class Player {
         // 激发磁性（按住持续）
         this.boostActive = false;
 
+        // 陷阱减速状态
+        this.slowTimer = 0;
+        this.trapKnockback = null;
+
         this.mapAPI = null;
         this.graphics = new CharacterGraphics();
         this.interaction = null;
         this.inputHelper = null;
         this.other = null;
+        this.trailEffect = null;
+        this.traps = null;
         this.teleportCooldown = 0;
+        this.lastVx = 0;
+        this.lastVy = 0;
     }
 
     setup(otherPlayer, mapAPI, interaction, inputHelper) {
@@ -70,6 +79,11 @@ class Player {
             this.teleportCooldown -= delta;
         }
 
+        // 陷阱减速计时
+        if (this.slowTimer > 0) {
+            this.slowTimer -= delta;
+        }
+
         if (this.inputHelper.isSwitchJustPressed(this.playerId)) {
             this.switchPolarity();
         }
@@ -77,8 +91,17 @@ class Player {
         this.boostActive = this.inputHelper.isBoostHeld(this.playerId);
 
         const dir = this.inputHelper.getDirection(this.playerId);
-        let vx = dir.x * this.moveSpeed;
-        let vy = dir.y * this.moveSpeed;
+        // 减速时速度减半
+        const speedMul = this.slowTimer > 0 ? 0.4 : 1.0;
+        let vx = dir.x * this.moveSpeed * speedMul;
+        let vy = dir.y * this.moveSpeed * speedMul;
+
+        // 陷阱击退向量
+        if (this.trapKnockback) {
+            vx += this.trapKnockback.vx;
+            vy += this.trapKnockback.vy;
+            this.trapKnockback = null;
+        }
 
         // 对方已到达则不再受磁力影响
         if (!this.other.arrived) {
@@ -129,17 +152,93 @@ class Player {
             newY = clamped.y;
         }
 
+        // 记录实际速度用于拖尾
+        this.lastVx = (newX - this.x) / Math.max(delta, 0.001);
+        this.lastVy = (newY - this.y) / Math.max(delta, 0.001);
+
         this.x = newX;
         this.y = newY;
+
+        // 发射拖尾粒子
+        if (this.trailEffect) {
+            this.trailEffect.emit(this.x, this.y, this.lastVx, this.lastVy);
+            this.trailEffect.update(delta);
+        }
+
+        // 检测陷阱碰撞
+        if (this.traps) {
+            this.checkTrapCollisions(delta);
+        }
+    }
+
+    checkTrapCollisions(delta) {
+        for (const trap of this.traps) {
+            if (!trap.checkCollision(this.x, this.y, this.radius)) continue;
+
+            const result = trap.trigger(this, delta);
+            if (!result) continue;
+
+            switch (result.type) {
+                case 'slow':
+                    this.slowTimer = 2.0;
+                    SignalBus.emit('effectSpawned', {
+                        type: 'floatText', x: this.x, y: this.y - 20,
+                        text: result.msg, color: '#ff8844'
+                    });
+                    break;
+
+                case 'reverse':
+                    this.switchPolarity();
+                    SignalBus.emit('effectSpawned', {
+                        type: 'floatText', x: this.x, y: this.y - 20,
+                        text: result.msg, color: '#cc66ff'
+                    });
+                    break;
+
+                case 'repelBurst':
+                    this.trapKnockback = { vx: result.vx, vy: result.vy };
+                    SignalBus.emit('effectSpawned', {
+                        type: 'floatText', x: this.x, y: this.y - 20,
+                        text: result.msg, color: '#ff4466'
+                    });
+                    break;
+
+                case 'attract':
+                    const dx = result.cx - this.x;
+                    const dy = result.cy - this.y;
+                    const d = Math.sqrt(dx * dx + dy * dy) || 1;
+                    this.x += (dx / d) * (result.force * delta) * 0.5;
+                    this.y += (dy / d) * (result.force * delta) * 0.5;
+                    break;
+            }
+            break;
+        }
     }
 
     draw(ctx) {
         if (this.arrived) return;
 
+        // 先绘制拖尾粒子（在玩家下方）
+        if (this.trailEffect) {
+            this.trailEffect.draw(ctx);
+        }
+
         const bodyColor = this.graphics.getBodyColor(this.polarity, this.boostActive);
         const outlineColor = this.graphics.getOutlineColor();
         const outlineWidth = this.graphics.getOutlineWidth();
         const radius = this.graphics.getRadius(this.boostActive);
+
+        // 减速视觉（蓝色拖影）
+        if (this.slowTimer > 0) {
+            const slowAlpha = this.slowTimer / 2.0 * 0.6;
+            const slowGrad = ctx.createRadialGradient(this.x, this.y, radius, this.x, this.y, radius + 16);
+            slowGrad.addColorStop(0, `rgba(100, 150, 255, ${slowAlpha})`);
+            slowGrad.addColorStop(1, 'rgba(100, 150, 255, 0)');
+            ctx.fillStyle = slowGrad;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, radius + 16, 0, Math.PI * 2);
+            ctx.fill();
+        }
 
         if (this.boostActive) {
             const flicker = 0.3 + Math.sin(Date.now() / 40) * 0.2;

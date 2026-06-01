@@ -338,6 +338,181 @@ body {
     color: #667788;
 }
 
+/* ── 多页面菜单系统 ── */
+.menu-page {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.menu-page.active {
+    display: flex;
+}
+
+.menu-page-title {
+    font-size: 30px;
+    color: #ffd700;
+    margin-bottom: 24px;
+    text-shadow: 0 0 16px rgba(255, 215, 0, 0.4);
+    letter-spacing: 3px;
+}
+
+/* 菜单按钮 */
+.menu-btn {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 22px;
+    padding: 18px 50px;
+    margin: 8px 0;
+    color: #ffffff;
+    background: linear-gradient(180deg, #2a3a5a 0%, #1a2840 100%);
+    border: 2px solid #3a5a8a;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 3px;
+    min-width: 340px;
+}
+
+.menu-btn:hover {
+    border-color: #ffd700;
+    background: linear-gradient(180deg, #3a4a6a 0%, #2a3860 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.15);
+}
+
+.menu-btn.primary {
+    background: linear-gradient(180deg, #ff6b6b 0%, #c0392b 100%);
+    border: none;
+    box-shadow: 0 8px 0 #8b0000, 0 10px 20px rgba(0, 0, 0, 0.5);
+    font-size: 28px;
+    padding: 22px 60px;
+    letter-spacing: 5px;
+}
+
+.menu-btn.primary:hover {
+    background: linear-gradient(180deg, #ff7777 0%, #cc4444 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 0 #8b0000, 0 12px 24px rgba(0, 0, 0, 0.5);
+}
+
+.menu-btn.back-btn {
+    margin-top: 20px;
+    background: rgba(20, 30, 55, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* 关卡选择网格 */
+.level-select-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    max-width: 750px;
+    margin-bottom: 16px;
+}
+
+.level-card {
+    font-family: 'Press Start 2P', cursive;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 16px;
+    background: rgba(20, 30, 55, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #aabbcc;
+}
+
+.level-card:hover {
+    border-color: #5dade2;
+    background: rgba(30, 50, 80, 0.5);
+    transform: translateY(-3px);
+}
+
+.level-card.selected {
+    border-color: #ffd700;
+    background: rgba(255, 215, 0, 0.1);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.level-num {
+    font-size: 36px;
+    color: #5dade2;
+    margin-bottom: 8px;
+}
+
+.level-card.selected .level-num {
+    color: #ffd700;
+}
+
+.level-name {
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* 设置区块 */
+.settings-section {
+    background: rgba(20, 30, 55, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 16px 24px;
+    margin-bottom: 16px;
+    max-width: 650px;
+    width: 100%;
+}
+
+.settings-label {
+    font-size: 18px;
+    color: #aabbcc;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+/* 拖尾选择 */
+.trail-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.trail-option {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 13px;
+    padding: 10px 18px;
+    background: rgba(20, 30, 55, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    cursor: pointer;
+    color: #aabbcc;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s;
+}
+
+.trail-option:hover {
+    border-color: #5dade2;
+    background: rgba(30, 50, 80, 0.5);
+}
+
+.trail-option.selected {
+    border-color: #ffd700;
+    color: #ffd700;
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.2);
+}
+
+.trail-dot {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+    box-shadow: 0 0 8px currentColor;
+}
+
 /* ═══════════════════════════════════════════════
  *  帮助面板
  * ═══════════════════════════════════════════════ */

@@ -9,52 +9,50 @@
 <body>
 
 <!-- ============================================================
-   开始覆盖层 — 全屏大界面（仓库原版风格）
+   主菜单覆盖层 — 多页面系统
    ============================================================ -->
 <div class="start-overlay" id="startOverlay">
-    <div class="start-title">磁力竞技场</div>
-    <div class="start-subtitle">MAGNETIC ARENA</div>
-    <div class="start-magnetic">
-        N <span class="repel">排斥</span> N &nbsp; | &nbsp; S <span class="repel">排斥</span> S
-        &nbsp; — &nbsp;
-        N <span class="attract">吸引</span> S
+
+    <!-- 主页 -->
+    <div class="menu-page active" id="menuMain">
+        <div class="start-title">磁力竞技场</div>
+        <div class="start-subtitle">MAGNETIC ARENA</div>
+        <div class="start-magnetic">
+            N <span class="repel">排斥</span> N &nbsp; | &nbsp; S <span class="repel">排斥</span> S
+            &nbsp; — &nbsp;
+            N <span class="attract">吸引</span> S
+        </div>
+
+        <button class="menu-btn primary" onclick="startGame()">⚔ 开 始 游 戏</button>
+        <button class="menu-btn" onclick="showMenuPage('menuLevels')">🗺 关 卡 选 择</button>
+        <button class="menu-btn" onclick="showMenuPage('menuSettings')">⚙ 设 置</button>
+        <div class="start-hint">按 Enter / Space 快速开始 &nbsp;|&nbsp; 按 H 查看帮助</div>
     </div>
 
-    <!-- 游戏规则 -->
-    <div class="start-rules">
-        <div class="start-rules-title">🏆 对抗规则</div>
-        <div class="start-rules-text">
-            ⏱ 从顶部出发，竞速抵达底部 <span style="color:#ffd700;">金色目标点 G</span><br>
-            💰 沿途收集金币 · 金币×10 = 金币分<br>
-            ⚡ 到达越快时间分越高 · floor(600÷秒数)<br>
-            🛡 磁力屏障 <span style="color:#55aaff;">B</span> 挡身体不挡磁力线<br>
-            👑 总分高者获胜！
+    <!-- 关卡选择 -->
+    <div class="menu-page" id="menuLevels">
+        <div class="menu-page-title">🗺 选择关卡</div>
+        <div class="level-select-grid" id="levelSelectGrid">
         </div>
+        <button class="menu-btn back-btn" onclick="showMenuPage('menuMain')">← 返回主页</button>
     </div>
 
-    <!-- 双人操控卡 -->
-    <div class="start-controls">
-        <div class="start-player-card p1">
-            <h3>🔴 玩家 1</h3>
-            <div class="start-key-row">
-                <span class="kb">W</span><span class="kb">A</span><span class="kb">S</span><span class="kb">D</span> &nbsp;移动<br>
-                <span class="kb">Q</span> &nbsp;切换磁极 N/S<br>
-                <span class="kb">G</span> &nbsp;激发磁性 ×3
-            </div>
-        </div>
-        <div class="start-player-card p2">
-            <h3>🔵 玩家 2</h3>
-            <div class="start-key-row">
-                <span class="kb">↑</span><span class="kb">←</span><span class="kb">↓</span><span class="kb">→</span> &nbsp;移动<br>
-                <span class="kb">/</span> &nbsp;切换磁极 N/S<br>
-                <span class="kb">.</span> &nbsp;激发磁性 ×3
-            </div>
-        </div>
-    </div>
+    <!-- 设置页面 -->
+    <div class="menu-page" id="menuSettings">
+        <div class="menu-page-title">⚙ 设置</div>
 
-    <!-- 3D红色开始按钮 -->
-    <button class="start-btn" onclick="startGame()">开 始 游 戏</button>
-    <div class="start-hint">或按 Enter / Space 开始 &nbsp;|&nbsp; 按 H 查看操作说明</div>
+        <div class="settings-section">
+            <div class="settings-label">🔴 P1 拖尾特效</div>
+            <div class="trail-grid" id="trailSelect1"></div>
+        </div>
+
+        <div class="settings-section">
+            <div class="settings-label">🔵 P2 拖尾特效</div>
+            <div class="trail-grid" id="trailSelect2"></div>
+        </div>
+
+        <button class="menu-btn back-btn" onclick="showMenuPage('menuMain')">← 返回主页</button>
+    </div>
 </div>
 
 <!-- ============================================================
@@ -70,7 +68,7 @@
                 <table>
                     <tr><td>W A S D</td><td>移动</td></tr>
                     <tr><td>Q</td><td>切换 N/S 磁极</td></tr>
-                    <tr><td>G</td><td>激发磁性（3倍磁力）</td></tr>
+                    <tr><td>G</td><td>激发磁性（5倍磁力）</td></tr>
                 </table>
             </div>
             <div class="help-card p2">
@@ -78,7 +76,7 @@
                 <table>
                     <tr><td>↑ ← ↓ →</td><td>移动</td></tr>
                     <tr><td>/</td><td>切换 N/S 磁极</td></tr>
-                    <tr><td>.</td><td>激发磁性（3倍磁力）</td></tr>
+                    <tr><td>.</td><td>激发磁性（5倍磁力）</td></tr>
                 </table>
             </div>
             <div class="help-card mechanics">
@@ -89,12 +87,13 @@
                     <tr><td>N + S</td><td>异极 → 互相吸引</td></tr>
                     <tr><td>激发磁性</td><td>按住持续，磁力×5</td></tr>
                     <tr><td>🛡 磁力屏障</td><td>阻挡身体但磁力线穿透</td></tr>
+                    <tr><td>💣 磁力陷阱 K</td><td>⚡减速/🔄反极/💥击退/🌀吸引</td></tr>
                 </table>
             </div>
             <div class="help-card shortcuts">
                 <h3>⌨ 快捷操作</h3>
                 <table>
-                    <tr><td>1 2 3 4</td><td>切换关卡</td></tr>
+                    <tr><td>1-8</td><td>切换关卡</td></tr>
                     <tr><td>R</td><td>重新开始当前关卡</td></tr>
                     <tr><td>H</td><td>显示/隐藏帮助</td></tr>
                     <tr><td>Enter</td><td>开始游戏</td></tr>
@@ -108,8 +107,9 @@
                 两位玩家<span style="color:#ff8888;">各自竞速</span>，从顶部出生点出发，抵达底部<span style="color:#ffd700;">金色目标点 G</span>！<br>
                 <span style="color:#55ff88;">到达后消失</span>，<span style="color:#55ffff;">双方都到达</span>后游戏结束，比较<span style="color:#ffd700;">总分</span>决胜负。<br>
                 <span style="color:#ffff55;">总分 = 金币数×10 + floor(600÷到达秒数)</span><br>
-                善用<span style="color:#ff6b6b;">磁力排斥</span>干扰对手，<span style="color:#66aaff;">磁力吸引</span>辅助自己，<span style="color:#cc66ff;">传送门 T</span>快速捷径！<br>
-                按 <span style="color:#ffff55;">G / .</span> 激发磁性，临时<span style="color:#ffff55;">5倍磁力</span>！
+                善用<span style="color:#ff6b6b;">磁力排斥</span>干扰对手，<span style="color:#66aaff;">磁力吸引</span>辅助自己！<br>
+                <span style="color:#cc66ff;">传送门 T</span>快速捷径 · <span style="color:#ff4466;">陷阱 K</span>注意躲避！<br>
+                按 <span style="color:#ffff55;">G / .</span> 激发磁性，<span style="color:#ffff55;">5倍磁力</span>！
             </div>
         </div>
 
@@ -125,57 +125,47 @@
         <canvas id="gameCanvas" width="800" height="600"></canvas>
     </div>
 
-    <!-- 右侧图例面板 -->
     <div class="legend-panel">
         <h2>📋 图例 LEGEND</h2>
 
-        <div class="level-tabs">
-            <button class="level-tab active" onclick="switchLevel(0)">关卡1</button>
-            <button class="level-tab" onclick="switchLevel(1)">关卡2</button>
-            <button class="level-tab" onclick="switchLevel(2)">关卡3</button>
-            <button class="level-tab" onclick="switchLevel(3)">关卡4</button>
+        <div class="level-tabs" id="levelTabs">
         </div>
 
-        <!-- 地形元素 -->
         <div class="legend-section-title">🏗 地形元素</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:#3a4a6a;"></div># 墙壁（可碰撞）</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#3a4a6a;"></div># 墙壁</div>
         <div class="legend-item"><div class="legend-swatch" style="background:rgba(51,153,255,0.4);"></div>B 磁力屏障</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:#7733aa;"></div>T 传送门（配对）</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:#ff2200;"></div>K 陷阱区域</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#7733aa;"></div>T 传送门</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#ff2200;"></div>K 陷阱</div>
 
-        <!-- 交互元素 -->
         <div class="legend-section-title">🎯 交互元素</div>
-        <div class="legend-item"><div class="legend-swatch legend-dot" style="background:#ff4444;"></div>P P1 出生点</div>
-        <div class="legend-item"><div class="legend-swatch legend-dot" style="background:#4488ff;"></div>Q P2 出生点</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:#ffd700;"></div>G 结算点（目标）</div>
+        <div class="legend-item"><div class="legend-swatch legend-dot" style="background:#ff4444;"></div>P P1出生点</div>
+        <div class="legend-item"><div class="legend-swatch legend-dot" style="background:#4488ff;"></div>Q P2出生点</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#ffd700;"></div>G 目标点</div>
 
-        <!-- 收集品 -->
         <div class="legend-section-title">💰 收集品</div>
-        <div class="legend-item"><div class="legend-swatch legend-dot" style="background:#ffd700;"></div>C 金币 (+1)</div>
-        <div class="legend-item"><div class="legend-swatch legend-dot" style="background:#ffaa00;"></div>M 金币堆 (+3)</div>
-        <div class="legend-item"><div class="legend-swatch legend-dot" style="background:#ff4444;box-shadow:0 0 5px red;"></div>H 高价值 (+5)</div>
-        <div class="legend-item"><div class="legend-swatch legend-dot" style="background:linear-gradient(45deg,red,gold,cyan,purple);"></div>S 超级 (+10)</div>
-        <div class="legend-item"><div class="legend-swatch" style="background:#cc33ff;transform:rotate(45deg);"></div>I 磁力道具 (×3磁力)</div>
+        <div class="legend-item"><div class="legend-swatch legend-dot" style="background:#ffd700;"></div>C 金币+1</div>
+        <div class="legend-item"><div class="legend-swatch legend-dot" style="background:#ffaa00;"></div>M 金币+3</div>
+        <div class="legend-item"><div class="legend-swatch legend-dot" style="background:#ff4444;box-shadow:0 0 5px red;"></div>H 金币+5</div>
+        <div class="legend-item"><div class="legend-swatch legend-dot" style="background:linear-gradient(45deg,red,gold,cyan,purple);"></div>S 金币+10</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#cc33ff;transform:rotate(45deg);"></div>I 道具×3</div>
 
-        <!-- 控制提示 -->
         <div class="control-hint">
             <div class="title">🎮 快捷操作</div>
             <div class="p1"><span class="key-badge">W</span><span class="key-badge">A</span><span class="key-badge">S</span><span class="key-badge">D</span> P1移动</div>
-            <div class="p1"><span class="key-badge">Q</span>切换磁极 <span class="key-badge">G</span>激发磁性</div>
+            <div class="p1"><span class="key-badge">Q</span>切换磁极 <span class="key-badge">G</span>激发×5</div>
             <hr class="divider">
             <div class="p2"><span class="key-badge">↑</span><span class="key-badge">←</span><span class="key-badge">↓</span><span class="key-badge">→</span> P2移动</div>
-            <div class="p2"><span class="key-badge">/</span>切换磁极 <span class="key-badge">.</span>激发磁性</div>
+            <div class="p2"><span class="key-badge">/</span>切换磁极 <span class="key-badge">.</span>激发×5</div>
             <hr class="divider">
-            <div class="tip">N=红色(北极) S=蓝色(南极)</div>
+            <div class="tip">N=红(北极) S=蓝(南极)</div>
             <div class="tip">同极排斥 ⇄ 异极吸引</div>
-            <div class="tip">激发磁性 = 3倍磁力</div>
-            <div class="info" style="margin-top:4px;"><span class="key-badge">1-4</span>切换关卡</div>
+            <div class="info" style="margin-top:4px;"><span class="key-badge">1-6</span>切换关卡</div>
             <div class="info"><span class="key-badge">R</span>重开 <span class="key-badge">H</span>帮助</div>
         </div>
     </div>
 </div>
 
-<!-- 按依赖顺序加载脚本 -->
+<!-- JS 依赖 -->
 <script src="scripts/utils/MathUtils.js"></script>
 <script src="scripts/app/SignalBus.js"></script>
 <script src="scripts/app/GameManager.js"></script>
@@ -189,16 +179,18 @@
 <script src="scripts/map/api/MapAPI.js"></script>
 <script src="scripts/character/movement/MagneticForceCalculator.js"></script>
 <script src="scripts/character/graphics/CharacterGraphics.js"></script>
-<script src="scripts/character/Player.js"></script>
+<script src="scripts/gameplay/effects/TrailEffect.js"></script>
+<script src="scripts/gameplay/traps/MagneticTrap.js"></script>
 <script src="scripts/gameplay/collectibles/Coin.js"></script>
 <script src="scripts/gameplay/collectibles/PowerUp.js"></script>
 <script src="scripts/gameplay/effects/EffectSpawner.js"></script>
 <script src="scripts/ui/GameHUD.js"></script>
+<script src="scripts/character/Player.js"></script>
 <script src="scripts/gameplay/session/Main.js"></script>
 
 <script>
 // ============================================================
-//  游戏入口
+//  游戏入口 + 菜单系统
 // ============================================================
 
 const canvas = document.getElementById('gameCanvas');
@@ -206,15 +198,92 @@ const ctx = canvas.getContext('2d');
 const startOverlay = document.getElementById('startOverlay');
 const helpOverlay = document.getElementById('helpOverlay');
 
-// 创建主会话实例
 let gameSession = new MainSession(canvas, ctx);
 let gameStarted = false;
 
-// 绘制初始背景
+// 当前选择关卡
+let selectedLevel = 0;
+
+// ── 构建菜单 ──
+
+// 关卡选择网格
+function buildLevelSelect() {
+    const grid = document.getElementById('levelSelectGrid');
+    grid.innerHTML = '';
+    const names = getAllLevelNames();
+    names.forEach((name, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'level-card' + (i === selectedLevel ? ' selected' : '');
+        btn.innerHTML = '<span class="level-num">' + (i + 1) + '</span><span class="level-name">' + name + '</span>';
+        btn.onclick = () => {
+            selectedLevel = i;
+            updateLevelCards();
+        };
+        grid.appendChild(btn);
+    });
+
+    // 关卡标签
+    const tabs = document.getElementById('levelTabs');
+    tabs.innerHTML = '';
+    names.forEach((name, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'level-tab' + (i === 0 ? ' active' : '');
+        btn.textContent = 'L' + (i + 1);
+        btn.onclick = () => switchLevel(i);
+        tabs.appendChild(btn);
+    });
+}
+
+function updateLevelCards() {
+    document.querySelectorAll('.level-card').forEach((card, i) => {
+        card.classList.toggle('selected', i === selectedLevel);
+    });
+}
+
+function getAllLevelNames() {
+    const s = new MainSession(canvas, ctx);
+    const names = s.levelMaps.map(m => m.name);
+    s.stop();
+    return names;
+}
+
+// 拖尾选择
+function buildTrailSelect() {
+    const styles = gameSession.getTrailStyles();
+    [1, 2].forEach(pid => {
+        const container = document.getElementById('trailSelect' + pid);
+        container.innerHTML = '';
+        const currentKey = pid === 1 ? gameSession.trailP1.styleKey : gameSession.trailP2.styleKey;
+
+        styles.forEach(s => {
+            const btn = document.createElement('button');
+            btn.className = 'trail-option' + (s.key === currentKey ? ' selected' : '');
+            btn.innerHTML = '<span class="trail-dot" style="background:' + getTrailDotColor(s.key) + '"></span>' + s.name;
+            btn.onclick = () => {
+                gameSession.setTrailStyle(pid, s.key);
+                document.querySelectorAll('#trailSelect' + pid + ' .trail-option').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+            };
+            container.appendChild(btn);
+        });
+    });
+}
+
+function getTrailDotColor(key) {
+    const map = { spark: '#ffdd44', energy: '#44ff88', neon: '#ff44ff', ice: '#88eeff', fire: '#ff4400', pink: '#ff88cc', gold: '#ffd700' };
+    return map[key] || '#ffffff';
+}
+
+// ── 菜单页面切换 ──
+function showMenuPage(pageId) {
+    document.querySelectorAll('.menu-page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+}
+
+// ── 游戏控制 ──
 function drawIdleScreen() {
     ctx.fillStyle = '#0d1b2a';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
     for (let i = 0; i < 60; i++) {
         const sx = (i * 137 + 50) % canvas.width;
         const sy = (i * 89 + 30) % canvas.height;
@@ -223,7 +292,6 @@ function drawIdleScreen() {
         ctx.arc(sx, sy, (i % 3) * 0.5 + 1, 0, Math.PI * 2);
         ctx.fill();
     }
-
     ctx.fillStyle = 'rgba(255, 215, 0, 0.6)';
     ctx.font = '14px "Press Start 2P"';
     ctx.textAlign = 'center';
@@ -231,32 +299,33 @@ function drawIdleScreen() {
     ctx.textAlign = 'start';
 }
 
-// 开始游戏
-function startGame() {
+function startGame(levelIdx) {
     if (gameStarted) return;
+    if (levelIdx !== undefined) selectedLevel = levelIdx;
     gameStarted = true;
     startOverlay.classList.add('hidden');
-    gameSession.start(0);
-    document.querySelectorAll('.level-tab').forEach((t, i) => {
-        t.classList.toggle('active', i === 0);
-    });
+    gameSession.start(selectedLevel);
+    updateTabActive(selectedLevel);
 }
 
-// 关卡切换
 function switchLevel(index) {
     if (!gameStarted) return;
+    gameSession.restart(index);
+    selectedLevel = index;
+    updateTabActive(index);
+}
+
+function updateTabActive(index) {
     document.querySelectorAll('.level-tab').forEach((t, i) => {
         t.classList.toggle('active', i === index);
     });
-    gameSession.restart(index);
 }
 
-// 帮助面板切换
 function toggleHelp() {
     helpOverlay.classList.toggle('visible');
 }
 
-// 全局键盘
+// ── 全局键盘 ──
 document.addEventListener('keydown', (e) => {
     const key = e.key.toLowerCase();
     if (!gameStarted && (key === 'enter' || key === ' ')) {
@@ -270,12 +339,13 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// 点击外部关闭帮助
 helpOverlay.addEventListener('click', (e) => {
     if (e.target === helpOverlay) helpOverlay.classList.remove('visible');
 });
 
-// 初始绘制
+// ── 初始化 ──
+buildLevelSelect();
+buildTrailSelect();
 drawIdleScreen();
 </script>
 </body>
