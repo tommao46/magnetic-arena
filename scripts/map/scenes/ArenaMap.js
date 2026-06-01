@@ -122,5 +122,8 @@ class MapBase extends IMapLoader {
     // 移除金币
     removeCoin(index) {
         this.coins.splice(index, 1);
+    // 获取所有碰撞矩形（墙壁+屏障），用于精确推出
+    getAllRects() {
+        return [...this.obstacles, ...this.barriers];
     }
 }

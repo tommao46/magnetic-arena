@@ -79,7 +79,6 @@ class Player {
             this.teleportCooldown -= delta;
         }
 
-        // 陷阱减速计时
         if (this.slowTimer > 0) {
             this.slowTimer -= delta;
         }
@@ -91,12 +90,10 @@ class Player {
         this.boostActive = this.inputHelper.isBoostHeld(this.playerId);
 
         const dir = this.inputHelper.getDirection(this.playerId);
-        // 减速时速度减半
         const speedMul = this.slowTimer > 0 ? 0.4 : 1.0;
         let vx = dir.x * this.moveSpeed * speedMul;
         let vy = dir.y * this.moveSpeed * speedMul;
 
-        // 陷阱击退向量
         if (this.trapKnockback) {
             vx += this.trapKnockback.vx;
             vy += this.trapKnockback.vy;
@@ -120,22 +117,50 @@ class Player {
             vy += magVel.y;
         }
 
+        // 两球间距检测 — 防止震荡和穿透
+        if (this.interaction && !this.other.arrived) {
+            const otherPos = this.other.getPos();
+            const dx = this.x - otherPos.x;
+            const dy = this.y - otherPos.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const minSep = this.radius * 2 + 2;
+
+            if (dist < minSep && dist > 0.001) {
+                // 直接推开到安全距离
+                const overlap = minSep - dist;
+                const nx = dx / dist;
+                const ny = dy / dist;
+                this.x += nx * overlap * 0.5;
+                this.y += ny * overlap * 0.5;
+                // 对方也被推开（由对方自己的update处理，但这里也给速度减震）
+                const relVx = vx - (this.other.lastVx || 0);
+                const relVy = vy - (this.other.lastVy || 0);
+                const relMag = Math.sqrt(relVx * relVx + relVy * relVy);
+                if (relMag > 600) {
+                    // 两球高速对冲，大幅减速防止穿透
+                    const damp = 600 / relMag;
+                    vx *= damp;
+                    vy *= damp;
+                }
+            }
+        }
+
+        // 速度上限防止穿透墙壁
+        const speed = Math.sqrt(vx * vx + vy * vy);
+        const maxSpeed = 600;
+        if (speed > maxSpeed) {
+            const scale = maxSpeed / speed;
+            vx *= scale;
+            vy *= scale;
+        }
+
         let newX = this.x + vx * delta;
         let newY = this.y + vy * delta;
 
-        // 玩家碰撞推开（对方未到达时才有效）
-        if (this.interaction && !this.other.arrived) {
-            const otherPos = this.other.getPos();
-            const push = this.interaction.calcPushApart({ x: newX, y: newY }, otherPos, 38);
-            newX += push.x;
-            newY += push.y;
-        }
-
+        // 墙壁碰撞 — 精确推出到边缘而非简单回退
         if (this.mapAPI) {
-            if (this.mapAPI.checkWallCollision({ x: newX, y: this.y }, this.radius)) newX = this.x;
-            if (this.mapAPI.checkWallCollision({ x: this.x, y: newY }, this.radius)) newY = this.y;
-            if (this.mapAPI.checkBarrierCollision({ x: newX, y: this.y }, this.radius)) newX = this.x;
-            if (this.mapAPI.checkBarrierCollision({ x: this.x, y: newY }, this.radius)) newY = this.y;
+            newX = this.resolveWallCollision({ x: newX, y: this.y }, this.x, true);
+            newY = this.resolveWallCollision({ x: this.x, y: newY }, this.y, false);
 
             if (this.teleportCooldown <= 0) {
                 const dest = this.mapAPI.checkTeleporter({ x: newX, y: newY }, this.radius);
@@ -152,23 +177,42 @@ class Player {
             newY = clamped.y;
         }
 
-        // 记录实际速度用于拖尾
         this.lastVx = (newX - this.x) / Math.max(delta, 0.001);
         this.lastVy = (newY - this.y) / Math.max(delta, 0.001);
 
         this.x = newX;
         this.y = newY;
 
-        // 发射拖尾粒子
         if (this.trailEffect) {
             this.trailEffect.emit(this.x, this.y, this.lastVx, this.lastVy);
             this.trailEffect.update(delta);
         }
 
-        // 检测陷阱碰撞
         if (this.traps) {
             this.checkTrapCollisions(delta);
         }
+    }
+
+    // 精确墙壁碰撞解析 — 推到边缘而非回退
+    resolveWallCollision(newPos, oldAxis, isX) {
+        const allRects = this.mapAPI.getAllRects ? this.mapAPI.getAllRects() : [];
+        for (const rect of allRects) {
+            if (!CollisionDetector.prototype.circleRectCollision(newPos.x, newPos.y, this.radius, rect.x, rect.y, rect.w, rect.h)) {
+                continue;
+            }
+            // 有碰撞 → 推到矩形边缘
+            const closestX = Math.max(rect.x, Math.min(newPos.x, rect.x + rect.w));
+            const closestY = Math.max(rect.y, Math.min(newPos.y, rect.y + rect.h));
+            const dx = newPos.x - closestX;
+            const dy = newPos.y - closestY;
+            const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+            const pushDist = this.radius - dist;
+            if (pushDist > 0) {
+                newPos.x += (dx / dist) * pushDist;
+                newPos.y += (dy / dist) * pushDist;
+            }
+        }
+        return isX ? newPos.x : newPos.y;
     }
 
     checkTrapCollisions(delta) {

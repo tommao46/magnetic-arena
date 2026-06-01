@@ -429,28 +429,14 @@ class MainSession {
 
         this.effectSpawner.draw(ctx);
 
-        // HUD
+        // HUD（全部紧凑+半透明，不遮挡地图）
         this.hud.drawPolarityStatus(ctx, this.player1, this.player2);
         this.hud.drawCoins(ctx, GameManager.getCoin(1), GameManager.getCoin(2));
         this.hud.drawTimer(ctx, this.totalTime);
-        this.hud.drawBoostStatus(ctx, this.player1, 14, this.canvasH - 100, 'P1', 'G', '#ffaa44');
-        this.hud.drawBoostStatus(ctx, this.player2, 296, this.canvasH - 100, 'P2', '.', '#6699ff');
+        this.hud.drawBoostStatus(ctx, this.player1, 4, this.canvasH - 84, 'P1', 'G', '#ffaa44');
+        this.hud.drawBoostStatus(ctx, this.player2, 316, this.canvasH - 84, 'P2', '.', '#6699ff');
 
         this.hud.drawArrivalStatus(ctx, this.player1, this.player2);
-
-        // 底部提示
-        ctx.fillStyle = 'rgba(6, 10, 20, 0.7)';
-        this.hud.roundRect(ctx, this.canvasW / 2 - 120, this.canvasH - 30, 240, 22, 4);
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-        ctx.lineWidth = 1;
-        this.hud.roundRect(ctx, this.canvasW / 2 - 120, this.canvasH - 30, 240, 22, 4);
-        ctx.stroke();
-        ctx.fillStyle = '#8899aa';
-        ctx.font = '7px "Press Start 2P"';
-        ctx.textAlign = 'center';
-        ctx.fillText('1-' + this.levelMaps.length + '换关卡 | R重开 | H帮助', this.canvasW / 2, this.canvasH - 14);
-        ctx.textAlign = 'start';
 
         if (this.titleAlpha > 0) {
             this.hud.drawLevelTitle(ctx, this.levelMaps[this.levelId].name, this.titleAlpha);

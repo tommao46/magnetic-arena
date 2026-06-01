@@ -15,152 +15,147 @@ class GameHUD {
 
     // 绘制磁性激发状态指示
     drawBoostStatus(ctx, player, x, y, labelPrefix, labelKey, labelColor) {
-        // 已到达的玩家不显示
         if (player.arrived) return;
 
-        const pw = 190, ph = 26;
-        ctx.fillStyle = 'rgba(6, 10, 20, 0.75)';
-        this.roundRect(ctx, x, y, pw, ph, 4);
+        const pw = 175, ph = 22;
+        ctx.fillStyle = 'rgba(6, 10, 20, 0.5)';
+        this.roundRect(ctx, x, y, pw, ph, 3);
         ctx.fill();
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
         ctx.lineWidth = 1;
-        this.roundRect(ctx, x, y, pw, ph, 4);
+        this.roundRect(ctx, x, y, pw, ph, 3);
         ctx.stroke();
 
-        ctx.font = this.fontSmall;
+        ctx.font = this.fontTiny;
 
         if (player.isBoosted) {
             const flicker = 0.7 + Math.sin(Date.now() / 60) * 0.3;
             ctx.fillStyle = `rgba(255, 255, 60, ${flicker})`;
-            ctx.fillText(labelPrefix + ' ⚡ 激发中(×5)', x + 6, y + 12);
+            ctx.fillText(labelPrefix + ' ⚡ ×5', x + 4, y + 10);
         } else {
             ctx.fillStyle = labelColor;
-            ctx.fillText(labelPrefix + ' [' + labelKey + '] 按住激发', x + 6, y + 12);
+            ctx.fillText(labelPrefix + ' [' + labelKey + ']激发', x + 4, y + 10);
         }
     }
 
-    // 绘制金币统计（居中面板）
+    // 绘制金币统计（居中面板 — 缩小+半透明）
     drawCoins(ctx, coinP1, coinP2) {
-        const pw = 260, ph = 30;
-        const px = this.canvasW / 2 - pw / 2, py = 8;
+        const pw = 200, ph = 24;
+        const px = this.canvasW / 2 - pw / 2, py = 4;
 
-        ctx.fillStyle = 'rgba(6, 10, 20, 0.75)';
-        this.roundRect(ctx, px, py, pw, ph, 5);
+        ctx.fillStyle = 'rgba(6, 10, 20, 0.5)';
+        this.roundRect(ctx, px, py, pw, ph, 4);
         ctx.fill();
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
         ctx.lineWidth = 1;
-        this.roundRect(ctx, px, py, pw, ph, 5);
+        this.roundRect(ctx, px, py, pw, ph, 4);
         ctx.stroke();
 
-        ctx.font = this.fontRegular;
+        ctx.font = this.fontSmall;
 
         ctx.fillStyle = '#ff6666';
         ctx.textAlign = 'center';
-        ctx.fillText('💰 P1: ' + coinP1, this.canvasW / 2 - 70, py + 21);
+        ctx.fillText('P1:' + coinP1 + '💰', this.canvasW / 2 - 50, py + 16);
 
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
         ctx.beginPath();
-        ctx.moveTo(this.canvasW / 2, py + 5);
-        ctx.lineTo(this.canvasW / 2, py + ph - 5);
+        ctx.moveTo(this.canvasW / 2, py + 3);
+        ctx.lineTo(this.canvasW / 2, py + ph - 3);
         ctx.stroke();
 
         ctx.fillStyle = '#66aaff';
-        ctx.fillText('💰 P2: ' + coinP2, this.canvasW / 2 + 70, py + 21);
+        ctx.fillText('P2:' + coinP2 + '💰', this.canvasW / 2 + 50, py + 16);
 
         ctx.textAlign = 'start';
     }
 
-    // 绘制计时器（右上角）
+    // 绘制计时器（右上角 — 缩小）
     drawTimer(ctx, time) {
         const seconds = time.toFixed(1);
-        const pw = 140, ph = 30;
-        const px = this.canvasW - pw - 8, py = 8;
+        const pw = 110, ph = 24;
+        const px = this.canvasW - pw - 4, py = 4;
 
-        ctx.fillStyle = 'rgba(6, 10, 20, 0.75)';
-        this.roundRect(ctx, px, py, pw, ph, 5);
+        ctx.fillStyle = 'rgba(6, 10, 20, 0.5)';
+        this.roundRect(ctx, px, py, pw, ph, 4);
         ctx.fill();
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
         ctx.lineWidth = 1;
-        this.roundRect(ctx, px, py, pw, ph, 5);
+        this.roundRect(ctx, px, py, pw, ph, 4);
         ctx.stroke();
 
         ctx.fillStyle = '#55ff88';
-        ctx.font = this.fontRegular;
+        ctx.font = this.fontSmall;
         ctx.textAlign = 'center';
-        ctx.fillText('⏱ ' + seconds + 's', px + pw / 2, py + 21);
+        ctx.fillText('⏱' + seconds, px + pw / 2, py + 16);
         ctx.textAlign = 'start';
     }
 
-    // 绘制到达状态（右侧中部）
+    // 绘制到达状态（右侧中部 — 极简）
     drawArrivalStatus(ctx, p1, p2) {
-        const pw = 160, ph = 52;
-        const px = this.canvasW - pw - 8, py = 84;
+        // 只有有人到达后才显示
+        if (!p1.arrived && !p2.arrived) return;
 
-        ctx.fillStyle = 'rgba(6, 10, 20, 0.75)';
-        this.roundRect(ctx, px, py, pw, ph, 5);
+        const pw = 130, ph = 40;
+        const px = this.canvasW - pw - 4, py = 68;
+
+        ctx.fillStyle = 'rgba(6, 10, 20, 0.5)';
+        this.roundRect(ctx, px, py, pw, ph, 4);
         ctx.fill();
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
         ctx.lineWidth = 1;
-        this.roundRect(ctx, px, py, pw, ph, 5);
+        this.roundRect(ctx, px, py, pw, ph, 4);
         ctx.stroke();
 
-        ctx.font = this.fontSmall;
+        ctx.font = '6px "Press Start 2P"';
 
-        // P1 状态
         if (p1.arrived) {
             ctx.fillStyle = '#55ff55';
-            ctx.fillText('✅ P1 到达!', px + 8, py + 12);
-            ctx.fillStyle = '#aaffaa';
-            ctx.fillText('  ' + p1.arrivalTime.toFixed(1) + 's', px + 8, py + 26);
+            ctx.fillText('✅ P1 ' + p1.arrivalTime.toFixed(1) + 's', px + 6, py + 13);
         } else {
             ctx.fillStyle = '#ff8866';
-            ctx.fillText('⏳ P1 行进中...', px + 8, py + 12);
+            ctx.fillText('⏳ P1', px + 6, py + 13);
         }
 
-        // 分隔线
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
         ctx.beginPath();
-        ctx.moveTo(px + 4, py + 30);
-        ctx.lineTo(px + pw - 4, py + 30);
+        ctx.moveTo(px + 4, py + 20);
+        ctx.lineTo(px + pw - 4, py + 20);
         ctx.stroke();
 
-        // P2 状态
         if (p2.arrived) {
             ctx.fillStyle = '#55ff55';
-            ctx.fillText('✅ P2 到达!', px + 8, py + 40);
-            ctx.fillStyle = '#aaffaa';
-            ctx.fillText('  ' + p2.arrivalTime.toFixed(1) + 's', px + 8, py + 54);
+            ctx.fillText('✅ P2 ' + p2.arrivalTime.toFixed(1) + 's', px + 6, py + 30);
         } else {
             ctx.fillStyle = '#88aaff';
-            ctx.fillText('⏳ P2 行进中...', px + 8, py + 40);
+            ctx.fillText('⏳ P2', px + 6, py + 30);
         }
     }
 
-    // 绘制极性状态（左下角）
+    // 绘制极性状态（左下角 — 缩小）
     drawPolarityStatus(ctx, player1, player2) {
-        const px = 8, py = this.canvasH - 60, pw = 210, ph = 30;
+        const px = 4, py = this.canvasH - 56, pw = 190, ph = 24;
 
-        ctx.fillStyle = 'rgba(6, 10, 20, 0.75)';
-        this.roundRect(ctx, px, py, pw, ph, 4);
+        ctx.fillStyle = 'rgba(6, 10, 20, 0.5)';
+        this.roundRect(ctx, px, py, pw, ph, 3);
         ctx.fill();
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
         ctx.lineWidth = 1;
-        this.roundRect(ctx, px, py, pw, ph, 4);
+        this.roundRect(ctx, px, py, pw, ph, 3);
         ctx.stroke();
 
-        ctx.font = this.fontSmall;
+        ctx.font = this.fontTiny;
 
         ctx.fillStyle = '#ff6666';
-        ctx.fillText('P1[' + player1.polarityText() + ']', px + 8, py + 13);
+        ctx.fillText('P1[' + player1.polarityText() + ']', px + 6, py + 11);
 
         const same = player1.polarity === player2.polarity;
         ctx.fillStyle = same ? '#ff6666' : '#5dade2';
         ctx.textAlign = 'center';
-        ctx.fillText(same ? '⟹ 排斥' : '⟸ 吸引', px + pw / 2, py + 13);
+        ctx.fillText(same ? '⟹排斥' : '⟸吸引', px + pw / 2, py + 11);
         ctx.textAlign = 'start';
 
         ctx.fillStyle = '#66aaff';
-        ctx.fillText('P2[' + player2.polarityText() + ']', px + pw - 70, py + 13);
+        ctx.fillText('P2[' + player2.polarityText() + ']', px + pw - 60, py + 11);
     }
 
     // 绘制磁力线（流动粒子效果）
@@ -377,27 +372,27 @@ class GameHUD {
         ctx.textAlign = 'start';
     }
 
-    // 绘制关卡标题（入场动画）
+    // 绘制关卡标题（入场动画 — 缩小+高位）
     drawLevelTitle(ctx, levelName, alpha) {
         if (alpha <= 0) return;
         ctx.save();
-        ctx.globalAlpha = alpha;
+        ctx.globalAlpha = alpha * 0.7;
 
-        ctx.fillStyle = 'rgba(6, 10, 20, 0.8)';
-        this.roundRect(ctx, this.canvasW / 2 - 180, 48, 360, 36, 5);
+        ctx.fillStyle = 'rgba(6, 10, 20, 0.6)';
+        this.roundRect(ctx, this.canvasW / 2 - 130, 34, 260, 28, 4);
         ctx.fill();
 
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
         ctx.lineWidth = 1;
-        this.roundRect(ctx, this.canvasW / 2 - 180, 48, 360, 36, 5);
+        this.roundRect(ctx, this.canvasW / 2 - 130, 34, 260, 28, 4);
         ctx.stroke();
 
         ctx.fillStyle = '#ffd700';
-        ctx.font = '12px "Press Start 2P"';
+        ctx.font = '9px "Press Start 2P"';
         ctx.textAlign = 'center';
-        ctx.shadowColor = 'rgba(255, 215, 0, 0.4)';
-        ctx.shadowBlur = 4;
-        ctx.fillText(levelName, this.canvasW / 2, 72);
+        ctx.shadowColor = 'rgba(255, 215, 0, 0.3)';
+        ctx.shadowBlur = 3;
+        ctx.fillText(levelName, this.canvasW / 2, 52);
         ctx.shadowBlur = 0;
         ctx.textAlign = 'start';
 

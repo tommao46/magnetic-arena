@@ -62,4 +62,9 @@ class MapAPI {
     checkTeleporter(pos, radius) {
         return this.map.checkTeleporter(pos, radius);
     }
+
+    // 获取所有碰撞矩形（墙壁+屏障）
+    getAllRects() {
+        return this.map.getAllRects();
+    }
 }
