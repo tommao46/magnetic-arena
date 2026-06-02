@@ -301,7 +301,8 @@ class MainSession {
         document.addEventListener('keyup', this._keyupHandler);
     }
 
-    start() {
+    start(levelId) {
+        if (levelId !== undefined) this.levelId = levelId;
         this.init(this.levelId);
         this.lastTime = performance.now();
         this.totalTime = 0;
@@ -312,6 +313,7 @@ class MainSession {
         if (levelId !== null) this.levelId = levelId;
         this.gameOver = false;
         this.init(this.levelId);
+        this.lastTime = performance.now();
         this.totalTime = 0;
     }
 
@@ -520,10 +522,20 @@ class MainSession {
 
     drawSpawn(ctx, cx, cy, color, label) {
         const pulse = Math.sin(this.totalTime * 3) * 0.12;
-        ctx.fillStyle = color.replace(')', `, ${0.2 + pulse})`).replace('rgb', 'rgba');
+        const r = parseInt(color.slice(1, 3), 16);
+        const g = parseInt(color.slice(3, 5), 16);
+        const b = parseInt(color.slice(5, 7), 16);
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${0.2 + pulse})`;
         ctx.beginPath(); ctx.arc(cx, cy, 16, 0, Math.PI * 2); ctx.fill();
-        ctx.strokeStyle = color.replace(')', ', 0.6)').replace('rgb', 'rgba');
+        ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.6)`;
         ctx.lineWidth = 2; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.arc(cx, cy, 16, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '8px "Press Start 2P"';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(label, cx, cy);
+        ctx.textAlign = 'start';
+        ctx.textBaseline = 'alphabetic';
     }
 
     drawGoal(ctx, cx, cy) {

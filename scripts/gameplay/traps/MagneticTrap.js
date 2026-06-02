@@ -92,18 +92,21 @@ class MagneticTrap {
         const halfW = this.w / 2;
         const halfH = this.h / 2;
 
-        // 底部脉冲光晕
-        ctx.fillStyle = t.glowColor.replace(')', `,${0.15 * pulse})`).replace('rgb', 'rgba');
+        const glowRgba = (alpha) => {
+            const hex = t.glowColor;
+            return `rgba(${parseInt(hex.slice(1,3),16)},${parseInt(hex.slice(3,5),16)},${parseInt(hex.slice(5,7),16)},${alpha})`;
+        };
+
+        ctx.fillStyle = glowRgba(0.15 * pulse);
         ctx.beginPath();
         ctx.arc(this.cx, this.cy, halfW * 0.8 * (1 + 0.2 * pulse), 0, Math.PI * 2);
         ctx.fill();
 
-        // 陷阱主体 — 菱形旋转
         ctx.save();
         ctx.translate(this.cx, this.cy);
         ctx.rotate(time * 0.5 + this.id * 0.7);
 
-        ctx.fillStyle = t.glowColor.replace(')', `,${0.3 * pulse})`).replace('rgb', 'rgba');
+        ctx.fillStyle = glowRgba(0.3 * pulse);
         ctx.beginPath();
         const r = halfW * 0.7;
         ctx.moveTo(0, -r);

@@ -198,6 +198,8 @@ const ctx = canvas.getContext('2d');
 const startOverlay = document.getElementById('startOverlay');
 const helpOverlay = document.getElementById('helpOverlay');
 
+canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+
 let gameSession = new MainSession(canvas, ctx);
 let gameStarted = false;
 
@@ -241,10 +243,7 @@ function updateLevelCards() {
 }
 
 function getAllLevelNames() {
-    const s = new MainSession(canvas, ctx);
-    const names = s.levelMaps.map(m => m.name);
-    s.stop();
-    return names;
+    return gameSession.levelMaps.map(m => m.name);
 }
 
 // 拖尾选择

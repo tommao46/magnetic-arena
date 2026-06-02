@@ -19,7 +19,9 @@ const GameManager = {
         { id: 0, name: '对决峡谷', description: '两端竞速，收集金币', unlocked: true },
         { id: 1, name: '磁性绕道', description: '屏障挡路，磁力破局', unlocked: true },
         { id: 2, name: '分岔迷宫', description: '双通道迷宫竞速', unlocked: true },
-        { id: 3, name: '漩涡竞技场', description: '层层环形，终极对决', unlocked: true }
+        { id: 3, name: '漩涡竞技场', description: '层层环形，终极对决', unlocked: true },
+        { id: 4, name: '陷阱迷宫', description: '陷阱密布，步步惊心', unlocked: true },
+        { id: 5, name: '磁暴战场', description: '终极磁暴，全面对决', unlocked: true }
     ],
 
     init() {
